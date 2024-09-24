@@ -1,5 +1,5 @@
-import { addEvent, addToArray } from "./scripts";
+import { addEvent, mouseLeave } from "./scripts";
 
 addEvent(".navBtn", ".navBtnDropDown");
 
-addToArray("navbarEl");
+mouseLeave("navbarEl");

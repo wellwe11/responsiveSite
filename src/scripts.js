@@ -1,4 +1,5 @@
-export class CreateEl {
+// generic element
+class CreateEl {
   constructor(type) {
     this.type = type;
     this.element = document.createElement(type);
@@ -15,6 +16,7 @@ export class CreateEl {
   }
 }
 
+// generic button
 class CreateButton extends CreateEl {
   constructor(text) {
     super("button");
@@ -27,6 +29,7 @@ class CreateButton extends CreateEl {
   }
 }
 
+// div with classname
 class CreateDropDown extends CreateEl {
   constructor() {
     super("div");
@@ -63,21 +66,29 @@ export const createNavBar = () => {
 };
 
 // factoryFunc for buttons
-export const CreateBtn = (appendId, forEl, forNr) => {
-  const element = new CreateButton("Click me")
+const CreateBtn = (appendId, forEl, forNr, text) => {
+  const element = new CreateButton(text)
     .appendTo(document.getElementById(appendId))
     .setId(`${forEl}Btn${forNr}`)
     .setClass(`${forEl}Btn`);
   return element;
 };
 
-// factoryFunc for dropdowns
-export const CreateDropDownFn = (forEl, forNr) => {
-  const element = new CreateDropDown()
-    .appendTo(document.getElementById("dropDownContainer"))
-    .setId(`${forEl}dropDown${forNr}`)
-    .setClass(`${forEl}DropDown`);
-  return element;
+// creates buttons for navbar (increase amount for ++buttons > extends CreateBtn)
+export const createNavBtns = (amount, ...names) => {
+  for (let i = 0; i < amount; i++) {
+    CreateBtn("btnsContainer", "nav", `${i}`, `menu${i}`);
+  }
+};
+
+// creates dropDown divs for buttons (increase amount for ++divs)
+export const createDropDownItems = (amount) => {
+  for (let i = 0; i < amount; i++) {
+    new CreateDropDown()
+      .appendTo(document.getElementById("dropDownContainer"))
+      .setId(`navBtndropDown${i}`)
+      .setClass("navBtnDropDown");
+  }
 };
 
 // toggles true/false
@@ -113,13 +124,19 @@ const changeVisibility = (el, value) => {
   }
 };
 
+// hover-state for dropdown menus
 export const addEvent = (elOne, elTwo) => {
   const myToggle = toggleEvent();
+
+  // all buttons
   const elementsOne = document.querySelectorAll(elOne);
+
+  // dropdown divs
   const elementsTwo = document.querySelectorAll(elTwo);
   elementsOne.forEach((elementOne, indexOne) => {
     elementOne.addEventListener("mouseover", () => {
       elementsTwo.forEach((elementTwo, indexTwo) => {
+        // index of btn matches index of dropdown div
         if (indexOne === indexTwo) {
           myToggle.isTrue();
           changeVisibility(elementTwo, myToggle.getValue());
@@ -127,6 +144,7 @@ export const addEvent = (elOne, elTwo) => {
           myToggle.isFalse();
           changeVisibility(elementTwo, myToggle.getValue());
         }
+        // logic to hide all dropdown-divs for mouseleave
         elementTwo.addEventListener("mouseleave", () => {
           elementsTwo.forEach((elementTwo) => {
             elementTwo.style.visibility = "hidden";
@@ -137,7 +155,8 @@ export const addEvent = (elOne, elTwo) => {
   });
 };
 
-export const addToArray = (parentEl) => {
+// logic to hide all dropdown-divs when mouseleave navbar
+export const mouseLeave = (parentEl) => {
   const myToggle = toggleEvent();
   const navbar = document.getElementById(parentEl);
   const elements = document.querySelectorAll(".navBtnDropDown");
@@ -147,4 +166,37 @@ export const addToArray = (parentEl) => {
       changeVisibility(element, myToggle.getValue());
     });
   });
+};
+
+// creates buttons > extends menuButtons (change amount to ++buttons)
+const createElements = (amount, parentEl, ...names) => {
+  for (let i = 0; i < amount; i++) {
+    if (names) {
+      CreateBtn(parentEl, "navBtndropDown", `${i}`, `${names[i]}`);
+    } else {
+      CreateBtn(parentEl, "navBtndropDown", `${i}`, `option${i}`);
+    }
+  }
+};
+
+// add buttons to dropdown divs
+const menuButtons = (amount, el) => {
+  const elements = document.querySelectorAll(el);
+  elements.forEach((element) => {
+    createElements(amount, element.id);
+  });
+};
+
+// extends menuButtons to simplify UI-control
+export const dropDownBtns = (amount) => {
+  return menuButtons(amount, ".navBtnDropDown");
+};
+
+// collectively create buttons for navbar with dropdown
+export const menuItemsWithDropDown = (amount) => {
+  // increase argument to increase navbarDivs > must match createNavBtns
+  createDropDownItems(amount);
+
+  // increase argument to increase buttons for navbar > must match createDropDownItems
+  createNavBtns(amount);
 };
