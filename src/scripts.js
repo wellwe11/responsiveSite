@@ -118,7 +118,6 @@ export const addEvent = (elOne, elTwo) => {
   const elementsOne = document.querySelectorAll(elOne);
   const elementsTwo = document.querySelectorAll(elTwo);
   elementsOne.forEach((elementOne, indexOne) => {
-    console.log(elementOne);
     elementOne.addEventListener("mouseover", () => {
       elementsTwo.forEach((elementTwo, indexTwo) => {
         if (indexOne === indexTwo) {
@@ -128,12 +127,24 @@ export const addEvent = (elOne, elTwo) => {
           myToggle.isFalse();
           changeVisibility(elementTwo, myToggle.getValue());
         }
-      });
-      elementOne.addEventListener("mouseleave", () => {
-        elementsTwo.forEach((elementTwo) => {
-          elementTwo.style.visibility = "hidden";
+        elementTwo.addEventListener("mouseleave", () => {
+          elementsTwo.forEach((elementTwo) => {
+            elementTwo.style.visibility = "hidden";
+          });
         });
       });
+    });
+  });
+};
+
+export const addToArray = (parentEl) => {
+  const myToggle = toggleEvent();
+  const navbar = document.getElementById(parentEl);
+  const elements = document.querySelectorAll(".navBtnDropDown");
+  navbar.addEventListener("mouseleave", () => {
+    elements.forEach((element) => {
+      myToggle.isFalse();
+      changeVisibility(element, myToggle.getValue());
     });
   });
 };

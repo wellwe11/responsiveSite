@@ -7,7 +7,7 @@ import {
 } from "./scripts";
 
 const containerEl = CreateContainer();
-const navBarEl = createNavBar();
+export const navBarEl = createNavBar();
 
 const divForBtns = CreateDivContainer("navbarEl", "btns");
 const navBtnOne = CreateBtn("btnsContainer", "nav", "One");
