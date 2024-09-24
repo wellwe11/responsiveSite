@@ -1,0 +1,58 @@
+#containerEl {
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+
+  height: 100%;
+}
+
+#navbarEl {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  grid-template-rows: 70% 30%;
+
+  align-content: center;
+
+  background-color: green;
+  width: 100%;
+  height: 50px;
+}
+
+#btnsContainer {
+  grid-column: 1;
+  grid-row: 1;
+  background-color: yellow;
+
+  display: flex;
+  justify-content: center;
+}
+
+.navBtn {
+  background-color: orange;
+
+  width: 5rem;
+  height: 100%;
+  margin-left: 2px;
+}
+
+.navBtn:hover {
+  background-color: red;
+}
+
+#dropDownContainer {
+  grid-column: 1;
+  grid-row: 2;
+  background-color: aliceblue;
+
+  display: flex;
+  justify-content: center;
+}
+
+.navBtnDropDown {
+  background-color: red;
+
+  visibility: hidden;
+  width: 5rem;
+  height: 600%;
+  margin-left: 2px;
+}
