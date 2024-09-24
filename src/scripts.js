@@ -169,13 +169,9 @@ export const mouseLeave = (parentEl) => {
 };
 
 // creates buttons > extends menuButtons (change amount to ++buttons)
-const createElements = (amount, parentEl, ...names) => {
+const createElements = (amount, parentEl) => {
   for (let i = 0; i < amount; i++) {
-    if (names) {
-      CreateBtn(parentEl, "navBtndropDown", `${i}`, `${names[i]}`);
-    } else {
-      CreateBtn(parentEl, "navBtndropDown", `${i}`, `option${i}`);
-    }
+    CreateBtn(parentEl, "navBtndropDown", `${i}`, `option${i}`);
   }
 };
 
@@ -199,4 +195,15 @@ export const menuItemsWithDropDown = (amount) => {
 
   // increase argument to increase buttons for navbar > must match createDropDownItems
   createNavBtns(amount);
+};
+
+export const menuBtnNames = (elClass, ...array) => {
+  const elements = document.querySelectorAll(elClass);
+  console.log(elements);
+  elements.forEach((element, index) => {
+    array.forEach((item) => {
+      console.log(element);
+      element.textContent = item[index];
+    });
+  });
 };

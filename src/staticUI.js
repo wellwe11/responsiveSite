@@ -1,10 +1,9 @@
 import {
   CreateContainer,
   CreateDivContainer,
-  createDropDownItems,
   createNavBar,
-  createNavBtns,
   dropDownBtns,
+  menuBtnNames,
   menuItemsWithDropDown,
 } from "./scripts";
 
@@ -12,7 +11,7 @@ import {
 const containerEl = CreateContainer();
 
 // navbar, exports to eventHandlers.js
-export const navBarEl = createNavBar();
+const navBarEl = createNavBar();
 
 // container for menuButtons
 const divForBtns = CreateDivContainer("navbarEl", "btns");
@@ -20,10 +19,16 @@ const divForBtns = CreateDivContainer("navbarEl", "btns");
 // container for dropdown menus
 const navBarContainer = CreateDivContainer("navbarEl", "dropDown");
 
-// creates buttons & dropdownMenus with buttons. Change argument to change amount
-menuItemsWithDropDown(4);
+// change amount to increase navBar btns & dropdownDivs
+let amount = 2;
+// creates buttons & dropdownMenus with buttons.
+menuItemsWithDropDown(amount);
+
+// add to array to configure button names
+const arrayWithNames = ["Explore", "Contact"];
+if (arrayWithNames.length > amount - 1) {
+  menuBtnNames(".navBtn", arrayWithNames);
+}
 
 // increase argument to increase buttons for each menuDiv
 dropDownBtns(3);
-
-const arrayWithNames = ["hi", "two", "eyyy", "ya?"];
