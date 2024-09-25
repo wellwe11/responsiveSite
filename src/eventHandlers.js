@@ -1,5 +1,5 @@
 import { addEvent, mouseLeave } from "./scripts";
 
-addEvent(".navBtn", ".navBtnDropDown");
+addEvent(".navBtn", ".navDropDown");
 
-mouseLeave("navbarEl");
+mouseLeave("navbarEl", "navDropDown");

@@ -17,22 +17,10 @@ class CreateEl {
 }
 
 // generic button
-class CreateButton extends CreateEl {
-  constructor(text) {
-    super("button");
+class ElWithClass extends CreateEl {
+  constructor(text, type) {
+    super(type);
     this.element.textContent = text;
-  }
-
-  setClass(className) {
-    this.element.classList.add(className);
-    return this;
-  }
-}
-
-// div with classname
-class CreateDropDown extends CreateEl {
-  constructor() {
-    super("div");
   }
 
   setClass(className) {
@@ -63,32 +51,6 @@ export const createNavBar = () => {
     .appendTo(document.getElementById("containerEl"))
     .setId("navbarEl");
   return element;
-};
-
-// factoryFunc for buttons
-const CreateBtn = (appendId, forEl, forNr, text) => {
-  const element = new CreateButton(text)
-    .appendTo(document.getElementById(appendId))
-    .setId(`${forEl}Btn${forNr}`)
-    .setClass(`${forEl}Btn`);
-  return element;
-};
-
-// creates buttons for navbar (increase amount for ++buttons > extends CreateBtn)
-export const createNavBtns = (amount, ...names) => {
-  for (let i = 0; i < amount; i++) {
-    CreateBtn("btnsContainer", "nav", `${i}`, `menu${i}`);
-  }
-};
-
-// creates dropDown divs for buttons (increase amount for ++divs)
-export const createDropDownItems = (amount) => {
-  for (let i = 0; i < amount; i++) {
-    new CreateDropDown()
-      .appendTo(document.getElementById("dropDownContainer"))
-      .setId(`navBtndropDown${i}`)
-      .setClass("navBtnDropDown");
-  }
 };
 
 // toggles true/false
@@ -156,10 +118,10 @@ export const addEvent = (elOne, elTwo) => {
 };
 
 // logic to hide all dropdown-divs when mouseleave navbar
-export const mouseLeave = (parentEl) => {
+export const mouseLeave = (parentEl, items) => {
   const myToggle = toggleEvent();
   const navbar = document.getElementById(parentEl);
-  const elements = document.querySelectorAll(".navBtnDropDown");
+  const elements = document.querySelectorAll(items);
   navbar.addEventListener("mouseleave", () => {
     elements.forEach((element) => {
       myToggle.isFalse();
@@ -168,41 +130,72 @@ export const mouseLeave = (parentEl) => {
   });
 };
 
-// creates buttons > extends menuButtons (change amount to ++buttons)
-const createElements = (amount, parentEl) => {
-  for (let i = 0; i < amount; i++) {
-    CreateBtn(parentEl, "navBtndropDown", `${i}`, `option${i}`);
-  }
-};
-
 // add buttons to dropdown divs
-const menuButtons = (amount, el) => {
-  const elements = document.querySelectorAll(el);
+const menuButtons = (amount) => {
+  const elements = document.querySelectorAll(".navDropDown");
+  console.log(elements);
   elements.forEach((element) => {
-    createElements(amount, element.id);
+    console.log(element);
+    createDropDownBtns(amount, element.id, `dropdown`);
   });
 };
 
-// extends menuButtons to simplify UI-control
-export const dropDownBtns = (amount) => {
-  return menuButtons(amount, ".navBtnDropDown");
+const createDropDownBtns = (amount, appendId, forEl) => {
+  for (let i = 0; i < amount; i++) {
+    new ElWithClass(`btn${i}`, "button")
+      .appendTo(document.getElementById(appendId))
+      .setId(`${forEl}Btn${i}`)
+      .setClass(`nav${forEl}`);
+  }
+};
+
+// creates buttons for navbar (increase amount for ++buttons > extends CreateBtn)
+export const createNavBtns = (amount, appendId, forEl) => {
+  for (let i = 0; i < amount; i++) {
+    new ElWithClass(`btn${i}`, "button")
+      .appendTo(document.getElementById(appendId))
+      .setId(`${forEl}Btn${i}`)
+      .setClass(`${forEl}Btn`);
+  }
+};
+
+export const createDropDownItems = (amount) => {
+  for (let i = 0; i < amount; i++) {
+    new ElWithClass("", "div")
+      .appendTo(document.getElementById("dropDownContainer"))
+      .setId(`navDropDown${i}`)
+      .setClass("navDropDown");
+  }
 };
 
 // collectively create buttons for navbar with dropdown
 export const menuItemsWithDropDown = (amount) => {
-  // increase argument to increase navbarDivs > must match createNavBtns
-  createDropDownItems(amount);
+  const createDropDownEls = () => {
+    return createDropDownItems(amount);
+  };
 
-  // increase argument to increase buttons for navbar > must match createDropDownItems
-  createNavBtns(amount);
+  const dropDownButtons = (privAmount) => {
+    // increase argument to increase navbarDivs > must match createNavBtns
+
+    return menuButtons(privAmount);
+  };
+
+  const navBtns = (appendId, forEl) => {
+    // increase argument to increase buttons for navbar > must match createDropDownItems
+    return createNavBtns(amount, appendId, forEl);
+  };
+
+  return {
+    dropDownButtons,
+    navBtns,
+    createDropDownEls,
+  };
 };
 
 export const menuBtnNames = (elClass, ...array) => {
   const elements = document.querySelectorAll(elClass);
-  console.log(elements);
   elements.forEach((element, index) => {
     array.forEach((item) => {
-      console.log(element);
       element.textContent = item[index];
     });
   });

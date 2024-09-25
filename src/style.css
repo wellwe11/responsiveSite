@@ -34,9 +34,6 @@
   align-self: end;
 }
 
-.navBtn:hover {
-}
-
 #dropDownContainer {
   grid-column: 1;
   grid-row: 2;
@@ -46,7 +43,9 @@
   justify-content: center;
 }
 
-.navBtnDropDown {
+.navDropDown {
+  display: flex;
+  flex-direction: column;
   visibility: hidden;
   width: 100%;
   height: max-content;
@@ -54,7 +53,7 @@
   margin-left: 2px;
 }
 
-.navBtndropDownBtn {
+.navDropDownBtn {
   width: 100%;
 }
 
