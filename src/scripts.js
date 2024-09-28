@@ -104,7 +104,7 @@ const menuButtons = (...amounts) => {
 
 const createDropDownBtns = (amount, appendId) => {
   for (let i = 0; i < amount; i++) {
-    new ElWithClass(`btn${i}`, "button")
+    new ElWithClass(`btn${i + 1}`, "button")
       .appendTo(document.getElementById(appendId))
       .setId(`dropdownBtn${i}`)
       .setClass(`navDropDownBtn`);
@@ -114,7 +114,7 @@ const createDropDownBtns = (amount, appendId) => {
 // creates buttons for navbar (increase amount for ++buttons > extends CreateBtn)
 const createNavBtns = (amount) => {
   for (let i = 0; i < amount; i++) {
-    new ElWithClass(`btn${i}`, "button")
+    new ElWithClass(`btn${i + 1}`, "button")
       .appendTo(document.getElementById("btnsContainer"))
       .setId(`navBtn${i}`)
       .setClass(`navBtn`);
@@ -132,24 +132,18 @@ const createDropDownItems = (amount) => {
 
 // collectively create buttons for navbar with dropdown
 export const menuItemsWithDropDown = (amount) => {
-  const createDropDownEls = () => {
-    return createDropDownItems(amount);
-  };
-
-  const dropDownButtons = (privAmount) => {
-    // increase argument to increase navbarDivs > must match createNavBtns
-    return menuButtons(privAmount);
-  };
-
-  const navBtns = () => {
-    // increase argument to increase buttons for navbar > must match createDropDownItems
-    return createNavBtns(amount);
-  };
-
   return {
-    dropDownButtons,
-    navBtns,
-    createDropDownEls,
+    navBtns: function () {
+      // increase argument to increase buttons for navbar > must match createDropDownItems
+      return createNavBtns(amount);
+    },
+    createDropDownEls: function () {
+      return createDropDownItems(amount);
+    },
+    dropDownButtons: function (privAmount) {
+      // increase argument to increase navbarDivs > must match createNavBtns
+      return menuButtons(privAmount);
+    },
   };
 };
 
@@ -164,11 +158,41 @@ export const setNames = (elClass, ...array) => {
 
 export const setChildNames = (parentEl, ...array) => {
   const parent = document.getElementById(parentEl);
-  const elements = parent.querySelectorAll("*");
-  elements.forEach((element) => console.log(element));
+  const elements = parent.querySelectorAll(".navDropDownBtn");
+
   elements.forEach((element, index) => {
     array.forEach((item) => {
       element.textContent = item[index];
     });
   });
+};
+
+const createMenuButtons = (targetEl, ...elements) => {
+  // creates buttons & dropdownMenus with buttons.
+  const element = menuItemsWithDropDown(elements);
+
+  // create menuItems
+  element.navBtns();
+  element.createDropDownEls();
+
+  const array = [];
+
+  const buttonsForMenu = (...buttons) => {
+    buttons.forEach((button) => {
+      array.push(button.length);
+    });
+
+    element.dropDownButtons(array);
+    array.forEach((_, index) => {
+      setChildNames(`${targetEl}${index}`, buttons[index]);
+    });
+  };
+
+  return {
+    buttonsForMenu,
+  };
+};
+
+export const finalizeItems = (someArr) => {
+  return createMenuButtons("navDropDown", someArr.length);
 };
