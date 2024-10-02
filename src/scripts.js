@@ -14,11 +14,15 @@ class CreateEl {
     this.element.id = id;
     return this;
   }
+
+  getId() {
+    return this.element.id;
+  }
 }
 
 // generic button
 class ElWithClass extends CreateEl {
-  constructor(text, type) {
+  constructor(type, text) {
     super(type);
     this.element.textContent = text;
   }
@@ -27,29 +31,60 @@ class ElWithClass extends CreateEl {
     this.element.classList.add(className);
     return this;
   }
+
+  getClass() {
+    return this.element.className;
+  }
+}
+
+class ElWithSrc extends CreateEl {
+  constructor(type) {
+    super(type);
+  }
+
+  setSrc(srcName) {
+    this.element.src = srcName;
+    return this;
+  }
+
+  setDataAttribute(data) {
+    this.element.dataset.value = data;
+    return this;
+  }
+}
+
+class elWithClassType extends ElWithClass {
+  constructor(type, text) {
+    super(type, text);
+  }
+
+  setType(typeValue) {
+    this.element.type = typeValue;
+    return this;
+  }
+
+  setValue(value) {
+    this.element.value = value;
+    return this;
+  }
+
+  setGroup(group) {
+    this.element.name = group;
+    return this;
+  }
 }
 
 // container for body
-export const CreateContainer = () => {
-  const element = new CreateEl("div")
-    .appendTo(document.body)
-    .setId("containerEl");
+export const CreateContainer = (id) => {
+  const element = new CreateEl("div").appendTo(document.body).setId(`${id}El`);
   return element;
 };
 
 // container for btns in navbar
-export const CreateDivContainer = (appendId, forEl) => {
+export const CreateDivContainer = (appendId, id) => {
   const element = new CreateEl("div")
     .appendTo(document.getElementById(appendId))
-    .setId(`${forEl}Container`);
-  return element;
-};
-
-// body's navbar
-export const createNavBar = () => {
-  const element = new CreateEl("div")
-    .appendTo(document.getElementById("containerEl"))
-    .setId("navbarEl");
+    .setId(id);
   return element;
 };
 
@@ -97,33 +132,29 @@ const menuButtons = (...amounts) => {
   const elements = document.querySelectorAll(".navDropDown");
   elements.forEach((element, index) => {
     amounts.forEach((amount) => {
-      createDropDownBtns(amount[index], element.id);
+      createElements(
+        "button",
+        amount[index],
+        element.id,
+        "dropdownBtn",
+        "navDropDownBtn"
+      );
     });
   });
 };
 
-const createDropDownBtns = (amount, appendId) => {
+const createElements = (type, amount, appendId, elId, elClass) => {
   for (let i = 0; i < amount; i++) {
-    new ElWithClass(`btn${i + 1}`, "button")
+    new ElWithClass(type, `${type}${i + 1}`)
       .appendTo(document.getElementById(appendId))
-      .setId(`dropdownBtn${i}`)
-      .setClass(`navDropDownBtn`);
-  }
-};
-
-// creates buttons for navbar (increase amount for ++buttons > extends CreateBtn)
-const createNavBtns = (amount) => {
-  for (let i = 0; i < amount; i++) {
-    new ElWithClass(`btn${i + 1}`, "button")
-      .appendTo(document.getElementById("btnsContainer"))
-      .setId(`navBtn${i}`)
-      .setClass(`navBtn`);
+      .setId(`${elId}${i}`)
+      .setClass(elClass);
   }
 };
 
 const createDropDownItems = (amount) => {
   for (let i = 0; i < amount; i++) {
-    new ElWithClass("", "div")
+    new ElWithClass("div", "")
       .appendTo(document.getElementById("dropDownContainer"))
       .setId(`navDropDown${i}`)
       .setClass("navDropDown");
@@ -135,13 +166,19 @@ export const menuItemsWithDropDown = (amount) => {
   return {
     navBtns: function () {
       // increase argument to increase buttons for navbar > must match createDropDownItems
-      return createNavBtns(amount);
+      return createElements(
+        "button",
+        amount,
+        "btnsContainer",
+        "navBtn",
+        "navBtn"
+      );
     },
     createDropDownEls: function () {
       return createDropDownItems(amount);
     },
     dropDownButtons: function (privAmount) {
-      // increase argument to increase navbarDivs > must match createNavBtns
+      // increase argument to increase navbarDivs > must match createBtns
       return menuButtons(privAmount);
     },
   };
@@ -167,7 +204,7 @@ export const setChildNames = (parentEl, ...array) => {
   });
 };
 
-const createMenuButtons = (targetEl, ...elements) => {
+const createMenuButtons = (targetEl, arr, ...elements) => {
   // creates buttons & dropdownMenus with buttons.
   const element = menuItemsWithDropDown(elements);
 
@@ -175,16 +212,19 @@ const createMenuButtons = (targetEl, ...elements) => {
   element.navBtns();
   element.createDropDownEls();
 
+  // array for amount of buttons needed
   const array = [];
 
   const buttonsForMenu = (...buttons) => {
     buttons.forEach((button) => {
+      // create dropdown dependant on need
       array.push(button.length);
     });
 
     element.dropDownButtons(array);
     array.forEach((_, index) => {
       setChildNames(`${targetEl}${index}`, buttons[index]);
+      setNames(".navBtn", arr);
     });
   };
 
@@ -194,5 +234,50 @@ const createMenuButtons = (targetEl, ...elements) => {
 };
 
 export const finalizeItems = (someArr) => {
-  return createMenuButtons("navDropDown", someArr.length);
+  return createMenuButtons("navDropDown", someArr, someArr.length);
+};
+
+// ------------------------------------------------------------------ // ------------------------------------------------------------------ //
+
+const createImages = (amount, appendId, src, data) => {
+  for (let i = 0; i < amount; i++) {
+    new ElWithSrc("img")
+      .appendTo(document.getElementById(appendId))
+      .setSrc(src)
+      .setDataAttribute(data);
+  }
+};
+
+const createRadios = (type, amount, appendId, elClass) => {
+  for (let i = 0; i < amount; i++) {
+    new elWithClassType(type, `${type}${i + 1}`)
+      .appendTo(document.getElementById(appendId))
+      .setClass(elClass)
+      .setType("radio")
+      .setValue(i)
+      .setGroup(amount);
+  }
+};
+
+export const sliderPictures = () => {
+  const createPic = (...sources) => {
+    sources.forEach((src, index) =>
+      createImages(1, "sliderPictureArea", src, index)
+    );
+  };
+  return {
+    createPic,
+  };
+};
+
+export const createDivs = (...divs) => {
+  let amount = document.querySelectorAll(divs);
+
+  const sliderDots = (appendId) => {
+    return createRadios("input", amount.length, appendId, "sliderDot");
+  };
+
+  return {
+    sliderDots,
+  };
 };

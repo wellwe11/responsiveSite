@@ -1,0 +1,120 @@
+:root {
+  --primary-color: #3333;
+}
+
+#slideContainerEl {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 25rem;
+  background-color: palegoldenrod;
+}
+
+#sliderDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  height: 90%;
+  width: 90%;
+  background-color: white;
+}
+
+#sliderDiv * {
+  background-color: var(--primary-color);
+
+  height: 95%;
+}
+
+#sliderBtnOne,
+#sliderBtnTwo {
+  width: 10%;
+}
+
+#sliderPictureArea {
+  display: flex;
+
+  width: 70%;
+  order: 2;
+
+  border: 5px solid var(--primary-color);
+
+  overflow: hidden;
+}
+
+#sliderPictureArea img {
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid var(--primary-color);
+  border-left: 1px solid var(--primary-color);
+}
+
+#sliderBtnOne {
+  order: 1;
+}
+
+#sliderBtnTwo {
+  order: 3;
+}
+
+@keyframes fadeAnimation {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#slideContainerEl {
+  display: flex;
+  flex-direction: column;
+}
+
+#dotContainer {
+  position: relative;
+  margin-top: -33px;
+}
+
+@keyframes goLeft {
+  from {
+    margin-left: 0%;
+  }
+  to {
+    margin-left: -100%;
+  }
+}
+
+@keyframes goRight {
+  from {
+    margin-left: 0%;
+  }
+  to {
+    margin-left: 100%;
+  }
+}
+@keyframes fromRight {
+  from {
+    margin-left: 100%;
+  }
+  to {
+    margin-left: 0%;
+  }
+}
+
+@keyframes fromLeft {
+  from {
+    margin-left: -100%;
+  }
+  to {
+    margin-left: 0%;
+  }
+}
+
+@keyframes toCenter {
+  to {
+    margin-left: 0%;
+  }
+}

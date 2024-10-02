@@ -1,4 +1,6 @@
 import "./CSSReset.css";
-import "./style.css";
-import "./staticUI";
+import "./navBarStyle.css";
+import "./navBarUI";
+import "./imageCarousel";
+import "./carouselStyle.css";
 import "./eventHandlers";
