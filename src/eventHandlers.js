@@ -1,5 +1,6 @@
 import { addEvent, mouseLeave } from "./scripts";
 
+const dots = document.querySelectorAll("#dotContainer input");
 // adds hover to each button
 addEvent(".navBtn", ".navDropDown");
 
@@ -7,19 +8,6 @@ addEvent(".navBtn", ".navDropDown");
 mouseLeave("navbarEl", ".navDropDown");
 
 let order = 0;
-
-document.addEventListener("DOMContentLoaded", () => {
-  const dots = document.querySelectorAll("#dotContainer input");
-  dots.forEach((dot) => (dot.value === "0" ? dot.click() : ""));
-});
-
-document.addEventListener("click", () => {
-  const slideImages = document.querySelectorAll("#sliderPictureArea img");
-  slideImages.forEach((image) => {
-    if (parseInt(image.getAttribute("data-value")) === parseInt(order)) {
-    }
-  });
-});
 
 const buttonLeft = document.getElementById("sliderBtnOne");
 const buttonRight = document.getElementById("sliderBtnTwo");
@@ -35,6 +23,7 @@ buttonRight.addEventListener("click", () => {
   ) {
     ++order;
   }
+
   imgs.forEach((img) => {
     if (parseInt(img.getAttribute("data-value")) === parseInt(order)) {
       img.style.animation = "fromRight 1s ease forwards";
@@ -42,6 +31,12 @@ buttonRight.addEventListener("click", () => {
 
     if (parseInt(img.getAttribute("data-value")) === parseInt(order - 1)) {
       img.style.animation = "goLeft 1s ease forwards";
+    }
+  });
+
+  dots.forEach((dot) => {
+    if (parseInt(dot.value) === parseInt(order)) {
+      dot.click();
     }
   });
 });
@@ -61,19 +56,41 @@ buttonLeft.addEventListener("click", () => {
     }
 
     if (parseInt(img.getAttribute("data-value")) === parseInt(order + 1)) {
-      console.log("-", img);
       img.style.animation = "goRight 1s ease forwards";
     }
   });
-});
-
-document.addEventListener("click", () => {
-  const dots = document.querySelectorAll("#dotContainer input");
   dots.forEach((dot) => {
     if (parseInt(dot.value) === parseInt(order)) {
       dot.click();
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  dots.forEach((dot) => {
+    if (parseInt(dot.value) === parseInt(order)) {
+      dot.click();
+    }
+  });
+});
+
+dots.forEach((dot) => {
+  dot.addEventListener("click", () => {
+    const imgs = document.querySelectorAll("#sliderPictureArea img");
+
+    imgs.forEach((img) => {
+      if (parseInt(dot.value) === parseInt(img.getAttribute("data-value"))) {
+        for (let i = 0; i < imgs.length; i++) {
+          if (dot.value > order) {
+            buttonRight.click();
+          } else if (dot.value < order) {
+            buttonLeft.click();
+          }
+        }
+      }
+    });
+  });
+});
+
 // create eventHandler for when data-attribute is active, matching
 // radioBtn is active
