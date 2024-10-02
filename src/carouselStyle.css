@@ -92,12 +92,12 @@
     margin-left: 0%;
   }
   to {
-    margin-left: 100%;
+    margin-left: 0%;
   }
 }
 @keyframes fromRight {
   from {
-    margin-left: 100%;
+    margin-left: 0%;
   }
   to {
     margin-left: 0%;
